@@ -1,291 +1,211 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PATLITE SAP-520PB-M GitHub Edition v3</title>
-    <style>
-        body {
-            background-color: #151515;
-            color: #ffffff;
-            font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        .amplifier {
-            background-color: #1e1e1e;
-            border: 4px solid #333;
-            border-radius: 6px;
-            padding: 20px;
-            width: 580px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
-        }
-        .brand-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            color: #888;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #2a2a2a;
-            padding-bottom: 5px;
-        }
-        .brand-logo {
-            font-weight: 900;
-            font-style: italic;
-            color: #ccc;
-            letter-spacing: 1px;
-        }
-        .panel-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-        }
-        button {
-            height: 55px;
-            border-radius: 6px;
-            border: 2px solid #111;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 3px 5px rgba(0,0,0,0.5);
-            transition: all 0.05s;
-            line-height: 1.3;
-        }
-        button span {
-            font-size: 9px;
-            font-weight: normal;
-            opacity: 0.8;
-        }
-        button:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px #111;
-        }
-        .btn-black { background-color: #2a2a2a; }
-        .btn-power { background-color: #3a3a3a; color: #ff4444; border-color: #555; }
-        .btn-red { background-color: #c9302c; border-color: #ac2925; }
-        .btn-green { background-color: #449d44; border-color: #398439; }
-        .btn-red.active { background-color: #ff2222; box-shadow: 0 0 12px #ff2222; }
-        .btn-black.active { background-color: #ffcc00; color: #000; border-color: #ffcc00; box-shadow: 0 0 10px #ffcc00; }
-        
-        .mic-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 9px;
-            color: #888;
-            cursor: pointer;
-            background-color: #222;
-            border-radius: 6px;
-            border: 2px solid #111;
-            height: 51px;
-        }
-        .mic-jack {
-            width: 23px;
-            height: 23px;
-            background: radial-gradient(circle, #111 40%, #666 70%);
-            border-radius: 50%;
-            border: 2px solid #444;
-            margin-top: 3px;
-            transition: all 0.2s;
-        }
-        .mic-container.active {
-            background-color: #444;
-            border-color: #ffcc00;
-        }
-        .mic-container.active .mic-jack {
-            background: radial-gradient(circle, #ffcc00 40%, #886600 70%);
-            box-shadow: 0 0 10px #ffcc00;
-        }
-        .status-text {
-            grid-column: span 6;
-            font-size: 11px;
-            color: #00ff00;
-            margin-bottom: 5px;
-            text-align: left;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PATLITE SAP-520PB-M</title>
+<style>
+  * { box-sizing: border-box; user-select: none; }
+  body {
+    background: #111317; color: #fff; font-family: sans-serif;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh; margin: 0; padding: 12px;
+  }
+  .amp {
+    width: 100%; max-width: 680px; background: #22262c;
+    border: 3px solid #444c56; border-radius: 10px; padding: 16px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.8);
+  }
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid #111; padding-bottom: 10px; margin-bottom: 14px;
+    font-size: 14px;
+  }
+  .brand { font-weight: 900; font-size: 20px; letter-spacing: 1.5px; }
+  .status {
+    background: #14171c; border: 1px solid #333; padding: 4px 10px;
+    border-radius: 14px; font-size: 12px; color: #9ba3af;
+  }
+  .grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  }
+  @media (max-width: 520px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  .btn {
+    background: #2c313a; border: 2px solid #3f4652; border-radius: 8px;
+    padding: 10px 6px; min-height: 86px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    text-align: center; transition: 0.08s;
+  }
+  .btn:active { transform: translateY(2px); }
+  .btn.off { opacity: 0.4; pointer-events: none; }
+  .btn.stop { background: #3d1c1e; border-color: #7a2e32; }
+  .led { width: 26px; height: 5px; border-radius: 3px; background: #111; }
+  .led.g.on { background: #2ea043; box-shadow: 0 0 10px #3fb950; }
+  .led.r.on { background: #ff2a2a; box-shadow: 0 0 12px #ff2a2a; }
+  .led.y.on { background: #f0883e; box-shadow: 0 0 10px #f0883e; }
+  .title { font-size: 14px; font-weight: bold; line-height: 1.25; }
+  .sub { font-size: 10px; color: #9ba3af; }
+  .beacons {
+    margin-top: 14px; background: #0d1014; border-radius: 6px; padding: 8px;
+    display: flex; justify-content: space-around; align-items: center;
+  }
+  .lamp {
+    width: 54px; height: 18px; border-radius: 9px; background: #2a0a0a;
+  }
+  .lamp.flash { background: #ff1e1e; box-shadow: 0 0 24px #ff1e1e; }
+</style>
 </head>
 <body>
-
-<div class="amplifier">
-    <div class="brand-header">
-        <span class="brand-logo">PATLITE</span>
-        <span id="statusLabel" class="status-text">🟢 GitHub直送モード：音源同期中</span>
-        <span>SAP-520PB-M</span>
-    </div>
-    
-    <div class="panel-grid">
-        <button class="btn-power">電源<br><span>□ ON/OFF</span></button>
-        <button id="btn-light" class="btn-red" onclick="toggleLight()">((( 🚨 )))<br><span>警光灯・緊光灯</span></button>
-        <button class="btn-black"></button> 
-        <button id="btn-4s" class="btn-black" onclick="pressSirenButton('4s')">4秒<br><span>自動</span></button>
-        <button id="btn-8s" class="btn-black" onclick="pressSirenButton('8s')">8秒<br><span>自動</span></button>
-        
-        <button id="btn-manual" class="btn-black" 
-                onmousedown="startManual()" onmouseup="stopManual()" 
-                ontouchstart="startManual()" ontouchend="stopManual()">🖐 手動<br><span>（長押し）</span></button>
-        
-        <div id="micBtn" class="mic-container" onclick="toggleMic()">
-            <span>🎤 マイク</span>
-            <div class="mic-jack"></div>
-        </div>
-        <button class="btn-black" style="font-size:9px;">補助入力</button>
-        <button class="btn-green">起立<br><span>[確認]</span></button>
-        <button class="btn-black"></button> 
-        <button id="btn-foot" class="btn-black" onclick="toggleFootLink()">足踏み<br><span>連動</span></button>
-        <button class="btn-black" style="background-color:#444;" onclick="stopAll()">サイレン<br><span>停止</span></button>
-    </div>
+<div class="amp">
+  <div class="header">
+    <span class="brand">PATLITE</span>
+    <span class="status" id="st">⚫ 電源OFF</span>
+    <span style="font-family:monospace;color:#adbac7;">SAP-520PB-M</span>
+  </div>
+  <div class="grid">
+    <div class="btn" id="bPwr"><div class="led g" id="lPwr"></div><div class="title">電源</div><div class="sub">ON/OFF</div></div>
+    <div class="btn off" id="bLgt"><div class="led r" id="lLgt"></div><div class="title">🚨警光灯</div><div class="sub">緊光灯連動</div></div>
+    <div class="btn off" id="b4s"><div class="led r" id="l4s"></div><div class="title">4秒<br>自動</div><div class="sub">周期 4.0秒</div></div>
+    <div class="btn off" id="b8s"><div class="led r" id="l8s"></div><div class="title">8秒<br>自動</div><div class="sub">周期 8.0秒</div></div>
+    <div class="btn off" id="bMan"><div class="led y" id="lMan"></div><div class="title">手動</div><div class="sub">（長押し）</div></div>
+    <div class="btn off" id="bMic"><div class="led y" id="lMic"></div><div class="title">マイク</div><div class="sub">補助入力</div></div>
+    <div class="btn off" id="bFoot"><div class="led g" id="lFoot"></div><div class="title">起立 [確認]</div><div class="sub">足踏み連動</div></div>
+    <div class="btn stop off" id="bStop"><div class="led"></div><div class="title">サイレン<br>停止</div><div class="sub">吹鳴解除</div></div>
+  </div>
+  <div class="beacons">
+    <div class="lamp" id="lp1"></div>
+    <span style="font-size:11px;color:#6e7681;">SAP-520 SERIES</span>
+    <div class="lamp" id="lp2"></div>
+  </div>
 </div>
 <script>
-    // 🎧 アップロードされた実際のファイル名（4.mp3 / 8.mp3）に完全に合わせました
-    const MP3_URLS = {
-        'start': './saisyo.mp3', 
-        '4s': './4.mp3',       
-        '8s': './8.mp3'        
-    };
+let pwr = false, lgt = false, foot = false, mic = false, mode = 'stop';
+let ctx = null, osc = null, gain = null, cycT = null, flsT = null, manT = null, freq = 360;
+const $ = id => document.getElementById(id);
+const ctrls = ['bLgt','b4s','b8s','bMan','bMic','bFoot','bStop'].map($);
 
-    let currentAudio = null;
-    let currentMode = null; 
-    let isLightOn = false;
-    let isFootLinkOn = false;
-    let isManualActive = false;
+function audioInit() {
+  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+  if (ctx.state === 'suspended') ctx.resume();
+}
 
-    let micStream = null;
-    let audioCtx = null;
-    let micSource = null;
-    let micGain = null;
-    let isMicOn = false;
+function toneOn(f = 380) {
+  audioInit(); toneOff();
+  osc = ctx.createOscillator(); gain = ctx.createGain();
+  const flt = ctx.createBiquadFilter();
+  osc.type = 'sawtooth'; osc.frequency.setValueAtTime(f, ctx.currentTime);
+  flt.type = 'lowpass'; flt.frequency.setValueAtTime(1400, ctx.currentTime);
+  gain.gain.setValueAtTime(0.001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.06);
+  osc.connect(flt); flt.connect(gain); gain.connect(ctx.destination);
+  osc.start();
+}
 
-    function toggleLight() {
-        isLightOn = !isLightOn;
-        document.getElementById('btn-light').classList.toggle('active', isLightOn);
+function toneOff() {
+  if (osc && ctx) {
+    const o = osc, g = gain, now = ctx.currentTime;
+    g.gain.cancelScheduledValues(now);
+    g.gain.setValueAtTime(g.gain.value, now);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+    setTimeout(() => { try { o.stop(); o.disconnect(); } catch(e){} }, 120);
+  }
+  osc = null;
+}
+
+function startAuto(sec) {
+  if (!pwr) return;
+  stopSiren(); mode = sec + 's'; setLight(true); render();
+  toneOn(400);
+  const run = () => {
+    if (!osc) return;
+    const t = ctx.currentTime;
+    osc.frequency.cancelScheduledValues(t);
+    osc.frequency.setValueAtTime(420, t);
+    osc.frequency.exponentialRampToValueAtTime(960, t + sec * 0.45);
+    osc.frequency.exponentialRampToValueAtTime(420, t + sec);
+  };
+  run(); cycT = setInterval(run, sec * 1000);
+}
+
+function startManual() {
+  if (!pwr) return;
+  clearInterval(cycT); clearInterval(manT);
+  mode = 'man'; setLight(true); render();
+  if (!osc) { freq = 360; toneOn(freq); }
+  manT = setInterval(() => {
+    if (osc && freq < 980) {
+      freq += 18; osc.frequency.setTargetAtTime(freq, ctx.currentTime, 0.04);
     }
+  }, 30);
+}
 
-    function toggleFootLink() {
-        isFootLinkOn = !isFootLinkOn;
-        document.getElementById('btn-foot').classList.toggle('active', isFootLinkOn);
+function endManual() {
+  if (mode !== 'man') return;
+  clearInterval(manT);
+  manT = setInterval(() => {
+    if (osc && freq > 360) {
+      freq -= 14; osc.frequency.setTargetAtTime(freq, ctx.currentTime, 0.06);
+    } else {
+      clearInterval(manT); toneOff(); mode = 'stop'; render();
     }
+  }, 30);
+}
 
-    async function toggleMic() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        const micBtn = document.getElementById('micBtn');
+function stopSiren() {
+  clearInterval(cycT); clearInterval(manT); toneOff(); mode = 'stop'; render();
+}
 
-        if (isMicOn) {
-            if (micStream) micStream.getTracks().forEach(track => track.stop());
-            if (micSource) micSource.disconnect();
-            if (micGain) micGain.disconnect();
-            isMicOn = false;
-            micBtn.classList.remove('active');
-            if (currentAudio) currentAudio.volume = 1.0; 
-        } else {
-            try {
-                micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-                micSource = audioCtx.createMediaStreamSource(micStream);
-                micGain = audioCtx.createGain();
-                micGain.gain.setValueAtTime(1.8, audioCtx.currentTime); 
-                
-                micSource.connect(micGain);
-                micGain.connect(audioCtx.destination);
-                
-                isMicOn = true;
-                micBtn.classList.add('active');
-                if (currentAudio) currentAudio.volume = 0.2; 
-            } catch (err) {
-                alert('マイクを起動できませんでした: ' + err);
-            }
-        }
-    }
+function setLight(on) {
+  lgt = on; clearInterval(flsT);
+  $('lp1').classList.remove('flash'); $('lp2').classList.remove('flash');
+  if (lgt && pwr) {
+    let f = false;
+    flsT = setInterval(() => {
+      f = !f;
+      $('lp1').classList.toggle('flash', f);
+      $('lp2').classList.toggle('flash', !f);
+    }, 220);
+  }
+  render();
+}
 
-    function pressSirenButton(mode) {
-        if (currentMode === mode) {
-            stopAll();
-            return;
-        }
-        stopAll();
-        if (!isLightOn) toggleLight();
-        currentMode = mode;
-        document.getElementById(`btn-${mode}`).classList.add('active');
+function render() {
+  ctrls.forEach(b => b.classList.toggle('off', !pwr));
+  $('lPwr').classList.toggle('on', pwr);
+  $('lLgt').classList.toggle('on', pwr && lgt);
+  $('l4s').classList.toggle('on', pwr && mode === '4s');
+  $('l8s').classList.toggle('on', pwr && mode === '8s');
+  $('lMan').classList.toggle('on', pwr && mode === 'man');
+  $('lMic').classList.toggle('on', pwr && mic);
+  $('lFoot').classList.toggle('on', pwr && foot);
+  $('st').textContent = !pwr ? '電源OFF' :
+    mode === '4s' ? '4秒自動' :
+    mode === '8s' ? '8秒自動' :
+    mode === 'man' ? '手動サイレン' :
+    lgt ? '赤色灯 作動中' : 'スタンバイ中';
+}
 
-        currentAudio = new Audio(MP3_URLS['start']);
-        if (isMicOn) currentAudio.volume = 0.2;
-        currentAudio.play();
+$('bPwr').onclick = () => {
+  pwr = !pwr;
+  if (pwr) audioInit(); else { stopSiren(); setLight(false); mic = false; foot = false; }
+  render();
+};
+$('bLgt').onclick = () => pwr && setLight(!lgt);
+$('b4s').onclick = () => startAuto(4);
+$('b8s').onclick = () => startAuto(8);
+$('bMic').onclick = () => { if (pwr) { mic = !mic; render(); } };
+$('bFoot').onclick = () => {
+  if (!pwr) return;
+  foot = !foot;
+  if (foot) startAuto(8); else stopSiren();
+};
+$('bStop').onclick = () => pwr && stopSiren();
 
-        currentAudio.onended = function() {
-            if (currentMode === mode) {
-                currentAudio = new Audio(MP3_URLS[mode]);
-                currentAudio.loop = true;
-                if (isMicOn) currentAudio.volume = 0.2;
-                currentAudio.play();
-            }
-        };
-    }
-
-    function startManual() {
-        if (isManualActive) return;
-        isManualActive = true;
-
-        if (currentMode && (currentMode === '4s' || currentMode === '8s') && isFootLinkOn) {
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio = new Audio(MP3_URLS['4s']);
-                currentAudio.playbackRate = 2.0; 
-                currentAudio.loop = true;
-                currentAudio.play();
-            }
-            return;
-        }
-
-        if (currentMode) stopAll();
-        if (!isLightOn) toggleLight();
-        document.getElementById('btn-manual').classList.add('active');
-
-        currentAudio = new Audio(MP3_URLS['start']);
-        if (isMicOn) currentAudio.volume = 0.2;
-        currentAudio.play();
-    }
-
-    function stopManual() {
-        isManualActive = false;
-        document.getElementById('btn-manual').classList.remove('active');
-
-        if (isFootLinkOn && (currentMode === '4s' || currentMode === '8s')) {
-            const prevMode = currentMode;
-            stopAll();
-            pressSirenButton(prevMode);
-            return;
-        }
-
-        if (!currentMode) {
-            stopAll();
-        }
-    }
-
-    function stopAll() {
-        if (currentAudio) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-            currentAudio = null;
-        }
-        ['btn-4s', 'btn-8s', 'btn-manual'].forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) btn.classList.remove('active');
-        });
-        if (!isManualActive) currentMode = null;
-    }
+$('bMan').onmousedown = startManual;
+$('bMan').ontouchstart = e => { e.preventDefault(); startManual(); };
+window.onmouseup = endManual;
+window.ontouchend = endManual;
+render();
 </script>
 </body>
 </html>
